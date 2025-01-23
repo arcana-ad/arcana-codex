@@ -1,0 +1,68 @@
+[project]
+name = "arcana-codex"
+version = "0.0.0"
+description = "Python SDK for Arcana"
+authors = [{ name = "Saurabh Ghanekar", email = "ghanekarsaurabh8@gmail.com" }]
+license = "BSD-2-Clause"
+license-files = ["LICENSE.md"]
+readme = "README.md"
+urls = { homepage = "http://arcana.ad/", repository = "https://github.com/arcana-ad/arcana-codex", documentation = "https://github.com/arcana-ad/arcana-codex" }
+requires-python = ">=3.10"
+dependencies = ["pydantic>=2.10"]
+
+[project.scripts]
+arcana-codex = "arcana_codex:main"
+
+[dependency-groups]
+dev = ["click>=8.1", "pre-commit>=4.0", "rich>=13.9", "ruff>=0.9", "tomli>=2.2"]
+test = ["pytest>=8.3", "pytest-cov>=6.0"]
+
+[tool.uv]
+default-groups = ["dev", "test"]
+
+
+[[tool.uv.index]]
+explicit = true
+name = "testpypi"
+publish-url = "https://test.pypi.org/legacy"
+url = "https://test.pypi.org/simple"
+
+
+[tool.ruff]
+line-length = 88
+
+
+[tool.ruff.lint]
+select = [
+    # "D",      # pydocstyle
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "ARG001", # unused arguments in functions
+]
+ignore = [
+    "E501", # line too long, handled by black
+    "B008", # do not perform function calls in argument defaults
+    "W191", # indentation contains tabs
+    "B904", # Allow raising exceptions without from e, for HTTPException
+]
+
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+
+[tool.versioning]
+backend = "uv"
+
+[tool.versioning.files]
+version_variable = ["src/arcana_codex/__init__.py:__version__"]
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
