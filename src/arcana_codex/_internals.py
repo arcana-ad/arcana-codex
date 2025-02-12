@@ -93,3 +93,27 @@ def _handle_response(
             return _handle_common_3xx_4xx_5xx_status_code(
                 response.status_code, response.text
             )
+
+
+async def _handle_async_response(
+    response: Response, is_streaming_response: bool = False
+) -> Result[dict, None] | Result[None, type[APIException]]:
+    match response.status_code:
+        case HTTPStatus.OK | HTTPStatus.CREATED | HTTPStatus.ACCEPTED:
+            if is_streaming_response:
+                value = None
+                error = None
+                async for line in response.aiter_lines():
+                    if line.startswith("data: "):
+                        value = json.loads(line[len("data: ") :].strip())
+                        break
+                    elif line.startswith("error: "):
+                        error = APIException(detail=line[len("error: ") :].strip())
+                        break
+                return Result(value=value, error=error)
+            else:
+                return Result(value=response.json(), error=None)
+        case _:
+            return _handle_common_3xx_4xx_5xx_status_code(
+                response.status_code, response.text
+            )
