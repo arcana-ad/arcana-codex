@@ -1,6 +1,6 @@
 [project]
 name = "arcana-codex"
-version = "0.0.0"
+version = "0.1.0a1"
 description = "Python SDK for Arcana"
 authors = [{ name = "Saurabh Ghanekar", email = "ghanekarsaurabh8@gmail.com" }]
 license = "BSD-2-Clause"
