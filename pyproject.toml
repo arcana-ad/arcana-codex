@@ -8,10 +8,7 @@ license-files = ["LICENSE.md"]
 readme = "README.md"
 urls = { homepage = "http://arcana.ad/", repository = "https://github.com/arcana-ad/arcana-codex", documentation = "https://github.com/arcana-ad/arcana-codex" }
 requires-python = ">=3.10"
-dependencies = ["pydantic>=2.10"]
-
-[project.scripts]
-arcana-codex = "arcana_codex:main"
+dependencies = ["httpx>=0.28", "pydantic>=2.10"]
 
 [dependency-groups]
 dev = ["click>=8.1", "pre-commit>=4.0", "rich>=13.9", "ruff>=0.9", "tomli>=2.2"]
