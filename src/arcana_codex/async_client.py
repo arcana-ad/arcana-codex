@@ -5,13 +5,12 @@ import httpx
 from ._internals import _handle_async_response
 from ._utils import Result
 from .exceptions import APIException
-from .models import AdUnitsFetchModel
+from .models import AdUnitsFetchModel, AdUnitsIntegrateModel
 
 
 class AsyncArcanaCodexClient:
     def __init__(self, api_key: str):
-        # self.base_url = "http://api-forge.arcana.ad/api/public"
-        self.base_url = "http://0.0.0.0:3281/api/public"
+        self.base_url = "http://api-forge.arcana.ad/api/public"
         self.headers = {"x-arcana-api-key": api_key, "Content-Type": "application/json"}
 
     async def _make_request(
@@ -30,7 +29,10 @@ class AsyncArcanaCodexClient:
                 match method:
                     case "GET":
                         async with client.stream(
-                            method, endpoint, headers={"Accept": "text/event-stream"}
+                            method,
+                            endpoint,
+                            headers={"Accept": "text/event-stream"},
+                            timeout=httpx.Timeout(timeout=45),
                         ) as stream_response:
                             return await _handle_async_response(
                                 stream_response, is_streaming_response=True
@@ -45,25 +47,40 @@ class AsyncArcanaCodexClient:
             else:
                 match method:
                     case "GET":
-                        response = await client.get(endpoint)
+                        response = await client.get(
+                            endpoint, timeout=httpx.Timeout(timeout=15)
+                        )
                     case "POST":
-                        response = await client.post(endpoint, json=json_payload)
+                        response = await client.post(
+                            endpoint,
+                            json=json_payload,
+                            timeout=httpx.Timeout(timeout=15),
+                        )
                     case "PUT":
-                        response = await client.put(endpoint, json=json_payload)
+                        response = await client.put(
+                            endpoint,
+                            json=json_payload,
+                            timeout=httpx.Timeout(timeout=15),
+                        )
                     case "DELETE":
                         if json_payload is not None:
                             response = await client.request(
-                                method, endpoint, json=json_payload
+                                method,
+                                endpoint,
+                                json=json_payload,
+                                timeout=httpx.Timeout(timeout=15),
                             )
                         else:
-                            response = await client.delete(endpoint)
+                            response = await client.delete(
+                                endpoint, timeout=httpx.Timeout(timeout=15)
+                            )
 
                 return await _handle_async_response(response)
 
     async def fetch_ad_units(self, payload: AdUnitsFetchModel):
         response = await self._make_request(
             "POST",
-            endpoint="/ad-units/",
+            endpoint="/ad-units/fetch",
             json_payload=payload.model_dump(mode="json"),
             is_streaming_request=False,
         )
@@ -74,7 +91,29 @@ class AsyncArcanaCodexClient:
         task_id = response.value["message"]["task_id"]
 
         streaming_response = await self._make_request(
-            "GET", f"/ad-units/response/{task_id}", is_streaming_request=True
+            "GET", f"/ad-units/fetch/response/{task_id}", is_streaming_request=True
+        )
+
+        if streaming_response.error is not None:
+            raise streaming_response.error
+
+        return streaming_response.value
+
+    async def integrate_ad_units(self, payload: AdUnitsIntegrateModel):
+        response = await self._make_request(
+            "POST",
+            endpoint="/ad-units/integrate",
+            json_payload=payload.model_dump(mode="json"),
+            is_streaming_request=False,
+        )
+
+        if response.error is not None:
+            raise response.error
+
+        task_id = response.value["message"]["task_id"]
+
+        streaming_response = await self._make_request(
+            "GET", f"/ad-units/integrate/response/{task_id}", is_streaming_request=True
         )
 
         if streaming_response.error is not None:

@@ -84,7 +84,10 @@ def _handle_response(
                         value = json.loads(line[len("data: ") :].strip())
                         break
                     elif line.startswith("error: "):
-                        error = APIException(detail=line[len("error: ") :].strip())
+                        error = APIException(
+                            status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
+                            detail=line[len("error: ") :].strip(),
+                        )
                         break
                 return Result(value=value, error=error)
             else:
@@ -108,7 +111,10 @@ async def _handle_async_response(
                         value = json.loads(line[len("data: ") :].strip())
                         break
                     elif line.startswith("error: "):
-                        error = APIException(detail=line[len("error: ") :].strip())
+                        error = APIException(
+                            status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
+                            detail=line[len("error: ") :].strip(),
+                        )
                         break
                 return Result(value=value, error=error)
             else:

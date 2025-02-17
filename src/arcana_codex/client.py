@@ -5,13 +5,12 @@ import httpx
 from ._internals import _handle_response
 from ._utils import Result
 from .exceptions import APIException
-from .models import AdUnitsFetchModel
+from .models import AdUnitsFetchModel, AdUnitsIntegrateModel
 
 
 class ArcanaCodexClient:
     def __init__(self, api_key: str):
-        # self.base_url = "http://api-forge.arcana.ad/api/public"
-        self.base_url = "http://0.0.0.0:3281/api/public"
+        self.base_url = "http://api-forge.arcana.ad/api/public"
         self.headers = {"x-arcana-api-key": api_key, "Content-Type": "application/json"}
 
     def _make_request(
@@ -30,7 +29,10 @@ class ArcanaCodexClient:
                 match method:
                     case "GET":
                         with client.stream(
-                            method, endpoint, headers={"Accept": "text/event-stream"}
+                            method,
+                            endpoint,
+                            headers={"Accept": "text/event-stream"},
+                            timeout=httpx.Timeout(timeout=45),
                         ) as stream_response:
                             return _handle_response(
                                 stream_response, is_streaming_response=True
@@ -45,25 +47,40 @@ class ArcanaCodexClient:
             else:
                 match method:
                     case "GET":
-                        response = client.get(endpoint)
+                        response = client.get(
+                            endpoint, timeout=httpx.Timeout(timeout=15)
+                        )
                     case "POST":
-                        response = client.post(endpoint, json=json_payload)
+                        response = client.post(
+                            endpoint,
+                            json=json_payload,
+                            timeout=httpx.Timeout(timeout=15),
+                        )
                     case "PUT":
-                        response = client.put(endpoint, json=json_payload)
+                        response = client.put(
+                            endpoint,
+                            json=json_payload,
+                            timeout=httpx.Timeout(timeout=15),
+                        )
                     case "DELETE":
                         if json_payload is not None:
                             response = client.request(
-                                method, endpoint, json=json_payload
+                                method,
+                                endpoint,
+                                json=json_payload,
+                                timeout=httpx.Timeout(timeout=15),
                             )
                         else:
-                            response = client.delete(endpoint)
+                            response = client.delete(
+                                endpoint, timeout=httpx.Timeout(timeout=15)
+                            )
 
                 return _handle_response(response)
 
     def fetch_ad_units(self, payload: AdUnitsFetchModel):
         response = self._make_request(
             "POST",
-            endpoint="/ad-units/",
+            endpoint="/ad-units/fetch",
             json_payload=payload.model_dump(mode="json"),
             is_streaming_request=False,
         )
@@ -74,7 +91,29 @@ class ArcanaCodexClient:
         task_id = response.value["message"]["task_id"]
 
         streaming_response = self._make_request(
-            "GET", f"/ad-units/response/{task_id}", is_streaming_request=True
+            "GET", f"/ad-units/fetch/response/{task_id}", is_streaming_request=True
+        )
+
+        if streaming_response.error is not None:
+            raise streaming_response.error
+
+        return streaming_response.value
+
+    def integrate_ad_units(self, payload: AdUnitsIntegrateModel):
+        response = self._make_request(
+            "POST",
+            endpoint="/ad-units/integrate",
+            json_payload=payload.model_dump(mode="json"),
+            is_streaming_request=False,
+        )
+
+        if response.error is not None:
+            raise response.error
+
+        task_id = response.value["message"]["task_id"]
+
+        streaming_response = self._make_request(
+            "GET", f"/ad-units/integrate/response/{task_id}", is_streaming_request=True
         )
 
         if streaming_response.error is not None:
