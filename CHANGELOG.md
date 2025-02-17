@@ -9,16 +9,19 @@ and this project adheres to [PyPA Versioning Specifications](https://packaging.p
 - Implemented `AsyncArcanaCodexClient` and `ArcanaCodexClient` for interacting with the Arcana Forge API.
     - Added `_internals.py` to handle HTTP response codes and exceptions (including `BadRequestException`, `UnauthorizedException`, `ForbiddenException`, `NotFoundException`, `UnprocessableEntityException`, `RateLimitException`, `InternalServerErrorException`, and a generic `APIException`).
     - Added `_utils.py` with a `Result` class using Pydantic for handling responses with either a value or an error.
-    - Added `models.py` with `AdUnitsFetchModel` for request payload validation.
+    - Added `models.py` with `AdUnitsFetchModel` for fetching ad units based on query and `AdUnitsIntegrateModel` for integrating ad units with base content.
     - Added `exceptions.py` to define custom exceptions for API interactions.
-- Added configuration for GitHub Issue templates (`.github/ISSUE_TEMPLATE/config.yml`).  Disables blank issues and directs users to the Arcana Community discussions.
+    - Added `client.py` and `async_client.py` with `fetch_ad_units` and `integrate_ad_units`.
+- Added configuration for GitHub Issue templates (`.github/ISSUE_TEMPLATE/config.yml`). Disables blank issues and directs users to the Arcana Community discussions.
+- Added timeout to httpx requests.
+- Added error raising for non-successful responses.
 
 ### Changed
 - Updated `pyproject.toml` to include `httpx` as a dependency.
     - Added `httpx>=0.28` to the project dependencies.
     - Updated `uv.lock` file to include new dependencies and their versions, such as `anyio`, `certifi`, `h11`, `httpcore`, `httpx`, `idna`, and `sniffio`.
-- Modified `src/arcana_codex/__init__.py` to expose `AsyncArcanaCodexClient`, `ArcanaCodexClient`, and `AdUnitsFetchModel`.
-    - Changed the file to import and expose the new client classes and model.  Removed the placeholder `main` function.
+- Modified `src/arcana_codex/__init__.py` to expose `AsyncArcanaCodexClient`, `ArcanaCodexClient`, `AdUnitsIntegrateModel` and `AdUnitsFetchModel`.
+    - Changed the file to import and expose the new client classes and models. Removed the placeholder `main` function.
 
 
 ----------------------------------------------------------------
