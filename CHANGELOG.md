@@ -16,12 +16,4 @@ and this project adheres to [PyPA Versioning Specifications](https://packaging.p
 - Added timeout to httpx requests.
 - Added error raising for non-successful responses.
 
-### Changed
-- Updated `pyproject.toml` to include `httpx` as a dependency.
-    - Added `httpx>=0.28` to the project dependencies.
-    - Updated `uv.lock` file to include new dependencies and their versions, such as `anyio`, `certifi`, `h11`, `httpcore`, `httpx`, `idna`, and `sniffio`.
-- Modified `src/arcana_codex/__init__.py` to expose `AsyncArcanaCodexClient`, `ArcanaCodexClient`, `AdUnitsIntegrateModel` and `AdUnitsFetchModel`.
-    - Changed the file to import and expose the new client classes and models. Removed the placeholder `main` function.
-
-
 ----------------------------------------------------------------
