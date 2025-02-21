@@ -9,8 +9,8 @@ from .models import AdUnitsFetchModel, AdUnitsIntegrateModel
 
 
 class ArcanaCodexClient:
-    def __init__(self, api_key: str):
-        self.base_url = "http://api-forge.arcana.ad/api/public"
+    def __init__(self, api_key: str, base_url: str = "http://api.arcana.ad/v1"):
+        self.base_url = base_url
         self.headers = {"x-arcana-api-key": api_key, "Content-Type": "application/json"}
 
     def _make_request(
