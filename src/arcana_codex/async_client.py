@@ -9,9 +9,23 @@ from .models import AdUnitsFetchModel, AdUnitsIntegrateModel
 
 
 class AsyncArcanaCodexClient:
-    def __init__(self, api_key: str, base_url: str = "http://api.arcana.ad/v1"):
+    def __init__(
+        self,
+        api_key: str,
+        base_url: str = "http://api.arcana.ad/v1",
+        headers: dict[str, str] | None = None,
+        **kwargs,
+    ):
+        if headers is None:
+            headers = {}
+
         self.base_url = base_url
-        self.headers = {"x-arcana-api-key": api_key, "Content-Type": "application/json"}
+        self.headers = {
+            "x-arcana-api-key": api_key,
+            "Content-Type": "application/json",
+            **headers,
+        }
+        self.kwargs = kwargs  # TODO: Come up with better name for this
 
     async def _make_request(
         self,
@@ -24,6 +38,7 @@ class AsyncArcanaCodexClient:
             base_url=self.base_url,
             headers=self.headers,
             timeout=httpx.Timeout(timeout=15),
+            **self.kwargs,
         ) as client:
             if is_streaming_request:
                 match method:
@@ -47,33 +62,18 @@ class AsyncArcanaCodexClient:
             else:
                 match method:
                     case "GET":
-                        response = await client.get(
-                            endpoint, timeout=httpx.Timeout(timeout=15)
-                        )
+                        response = await client.get(endpoint)
                     case "POST":
-                        response = await client.post(
-                            endpoint,
-                            json=json_payload,
-                            timeout=httpx.Timeout(timeout=15),
-                        )
+                        response = await client.post(endpoint, json=json_payload)
                     case "PUT":
-                        response = await client.put(
-                            endpoint,
-                            json=json_payload,
-                            timeout=httpx.Timeout(timeout=15),
-                        )
+                        response = await client.put(endpoint, json=json_payload)
                     case "DELETE":
                         if json_payload is not None:
                             response = await client.request(
-                                method,
-                                endpoint,
-                                json=json_payload,
-                                timeout=httpx.Timeout(timeout=15),
+                                method, endpoint, json=json_payload
                             )
                         else:
-                            response = await client.delete(
-                                endpoint, timeout=httpx.Timeout(timeout=15)
-                            )
+                            response = await client.delete(endpoint)
 
                 return await _handle_async_response(response)
 

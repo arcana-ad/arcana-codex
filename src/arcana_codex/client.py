@@ -9,9 +9,23 @@ from .models import AdUnitsFetchModel, AdUnitsIntegrateModel
 
 
 class ArcanaCodexClient:
-    def __init__(self, api_key: str, base_url: str = "http://api.arcana.ad/v1"):
+    def __init__(
+        self,
+        api_key: str,
+        base_url: str = "http://api.arcana.ad/v1",
+        headers: dict[str, str] | None = None,
+        **kwargs,
+    ):
+        if headers is None:
+            headers = {}
+
         self.base_url = base_url
-        self.headers = {"x-arcana-api-key": api_key, "Content-Type": "application/json"}
+        self.headers = {
+            "x-arcana-api-key": api_key,
+            "Content-Type": "application/json",
+            **headers,
+        }
+        self.kwargs = kwargs  # TODO: Come up with better name for this
 
     def _make_request(
         self,
@@ -24,6 +38,7 @@ class ArcanaCodexClient:
             base_url=self.base_url,
             headers=self.headers,
             timeout=httpx.Timeout(timeout=15),
+            **self.kwargs,
         ) as client:
             if is_streaming_request:
                 match method:
@@ -47,33 +62,18 @@ class ArcanaCodexClient:
             else:
                 match method:
                     case "GET":
-                        response = client.get(
-                            endpoint, timeout=httpx.Timeout(timeout=15)
-                        )
+                        response = client.get(endpoint)
                     case "POST":
-                        response = client.post(
-                            endpoint,
-                            json=json_payload,
-                            timeout=httpx.Timeout(timeout=15),
-                        )
+                        response = client.post(endpoint, json=json_payload)
                     case "PUT":
-                        response = client.put(
-                            endpoint,
-                            json=json_payload,
-                            timeout=httpx.Timeout(timeout=15),
-                        )
+                        response = client.put(endpoint, json=json_payload)
                     case "DELETE":
                         if json_payload is not None:
                             response = client.request(
-                                method,
-                                endpoint,
-                                json=json_payload,
-                                timeout=httpx.Timeout(timeout=15),
+                                method, endpoint, json=json_payload
                             )
                         else:
-                            response = client.delete(
-                                endpoint, timeout=httpx.Timeout(timeout=15)
-                            )
+                            response = client.delete(endpoint)
 
                 return _handle_response(response)
 
