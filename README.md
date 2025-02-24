@@ -20,7 +20,7 @@ client = ArcanaCodexClient(
 )
 
 fetch_payload = AdUnitsFetchModel(query="How can I write blogs for my website?")
-fetch_result = sync_fetch_version(client, fetch_payload)
+fetch_result = client.fetch_ad_units(fetch_payload)
 
 ad_unit_ids = [ad_unit["id"] for ad_unit in fetch_result["response_data"]]
 
@@ -28,7 +28,7 @@ ad_unit_ids = [ad_unit["id"] for ad_unit in fetch_result["response_data"]]
 integrate_payload = AdUnitsIntegrateModel(
     ad_unit_ids=ad_unit_ids, base_content="insert the llm response generated from your application as the base content"
 )
-integration_result = sync_fetch_version(client, integrate_payload)
+integration_result = client.fetch_ad_units(integrate_payload)
 
 print(integration_result)
 ```
