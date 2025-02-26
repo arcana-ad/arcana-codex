@@ -11,7 +11,13 @@ requires-python = ">=3.10"
 dependencies = ["httpx>=0.28", "pydantic>=2.10"]
 
 [dependency-groups]
-dev = ["click>=8.1", "pre-commit>=4.0", "rich>=13.9", "ruff>=0.9", "tomli>=2.2"]
+dev = [
+    "click>=8.1",
+    "pre-commit>=4.0",
+    "rich>=13.9",
+    "ruff>=0.9",
+    "tomli>=2.2; python_version < '3.11'", # Note: Remove this when the 'requires-python' becomes ">=3.11" 
+]
 test = ["pytest>=8.3", "pytest-cov>=6.0"]
 
 [tool.uv]

@@ -40,7 +40,7 @@ dev = [
     { name = "pre-commit" },
     { name = "rich" },
     { name = "ruff" },
-    { name = "tomli" },
+    { name = "tomli", marker = "python_full_version < '3.11'" },
 ]
 test = [
     { name = "pytest" },
@@ -59,7 +59,7 @@ dev = [
     { name = "pre-commit", specifier = ">=4.0" },
     { name = "rich", specifier = ">=13.9" },
     { name = "ruff", specifier = ">=0.9" },
-    { name = "tomli", specifier = ">=2.2" },
+    { name = "tomli", marker = "python_full_version < '3.11'", specifier = ">=2.2" },
 ]
 test = [
     { name = "pytest", specifier = ">=8.3" },

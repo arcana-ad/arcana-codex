@@ -4,11 +4,15 @@ from pathlib import Path
 from typing import Any
 
 import click
-import tomli
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.traceback import install
+
+try:
+    import tomllib  # Python 3.11+
+except ImportError:
+    import tomli as tomllib  # type: ignore[import]
 
 install(extra_lines=0, max_frames=10)
 
@@ -33,7 +37,7 @@ def load_config():
     pyproject_path = Path.cwd() / "pyproject.toml"
     if pyproject_path.exists():
         with open(pyproject_path, "rb") as f:
-            pyproject_data = tomli.load(f)
+            pyproject_data = tomllib.load(f)
             config = pyproject_data.get("tool", {}).get("versioning", {}).get("files")
 
             backend = (
