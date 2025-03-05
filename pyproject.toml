@@ -3,7 +3,7 @@ name = "arcana-codex"
 version = "0.1.0"
 description = "Python SDK for Arcana"
 authors = [{ name = "Saurabh Ghanekar", email = "ghanekarsaurabh8@gmail.com" }]
-license = "BSD-2-Clause"
+license = "Apache-2.0"
 license-files = ["LICENSE.md"]
 readme = "README.md"
 urls = { homepage = "http://arcana.ad/", repository = "https://github.com/arcana-ad/arcana-codex", documentation = "https://github.com/arcana-ad/arcana-codex" }
