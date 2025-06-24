@@ -1,12 +1,12 @@
 [project]
-name = "arcana-codex"
-version = "0.2.0"
-description = "Python SDK for Arcana"
+name = "atheon-codex"
+version = "0.3.0.dev0"
+description = "Python SDK for Atheon"
 authors = [{ name = "Saurabh Ghanekar", email = "ghanekarsaurabh8@gmail.com" }]
 license = "Apache-2.0"
 license-files = ["LICENSE.md"]
 readme = "README.md"
-urls = { homepage = "http://arcana.ad/", repository = "https://github.com/arcana-ad/arcana-codex", documentation = "https://github.com/arcana-ad/arcana-codex" }
+urls = { homepage = "http://atheon.ad/", repository = "https://github.com/atheon-inc/atheon-codex", documentation = "https://github.com/atheon-inc/atheon-codex" }
 requires-python = ">=3.10"
 dependencies = ["httpx>=0.28", "pydantic>=2.10"]
 
@@ -42,6 +42,7 @@ select = [
     "W",      # pycodestyle warnings
     "F",      # pyflakes
     "I",      # isort
+    "S",      # flake8-bandit
     "B",      # flake8-bugbear
     "C4",     # flake8-comprehensions
     "UP",     # pyupgrade
@@ -63,7 +64,7 @@ convention = "google"
 backend = "uv"
 
 [tool.versioning.files]
-version_variable = ["src/arcana_codex/__init__.py:__version__"]
+version_variable = ["src/atheon_codex/__init__.py:__version__"]
 
 
 [build-system]
