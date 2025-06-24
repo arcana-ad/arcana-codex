@@ -12,7 +12,7 @@ class AsyncAtheonCodexClient:
     def __init__(
         self,
         api_key: str,
-        base_url: str = "http://api.arcana.ad/v1",
+        base_url: str = "http://api.atheon.ad/v1",
         headers: dict[str, str] | None = None,
         **kwargs,
     ):
@@ -21,7 +21,7 @@ class AsyncAtheonCodexClient:
 
         self.base_url = base_url
         self.headers = {
-            "x-arcana-api-key": api_key,
+            "x-atheon-api-key": api_key,
             "Content-Type": "application/json",
             **headers,
         }
