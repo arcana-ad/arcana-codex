@@ -1,11 +1,11 @@
-from .async_client import AsyncArcanaCodexClient
-from .client import ArcanaCodexClient
+from .async_client import AsyncAtheonCodexClient
+from .client import AtheonCodexClient
 from .models import AdUnitsFetchModel, AdUnitsIntegrateModel
 
-__version__ = "0.3.0.dev1"
+__version__ = "0.3.0.dev2"
 __all__ = [
-    "AsyncArcanaCodexClient",
-    "ArcanaCodexClient",
+    "AsyncAtheonCodexClient",
+    "AtheonCodexClient",
     "AdUnitsFetchModel",
     "AdUnitsIntegrateModel",
     "__version__",

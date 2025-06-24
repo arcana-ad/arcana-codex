@@ -8,7 +8,7 @@ from .exceptions import APIException
 from .models import AdUnitsFetchModel, AdUnitsIntegrateModel
 
 
-class AsyncArcanaCodexClient:
+class AsyncAtheonCodexClient:
     def __init__(
         self,
         api_key: str,
