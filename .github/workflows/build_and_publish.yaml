@@ -34,6 +34,7 @@ jobs:
   publish-package:
     needs: build-package
     runs-on: ubuntu-latest
+    environment: release
     permissions:
       id-token: write
     steps:
