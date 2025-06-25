@@ -33,4 +33,4 @@ integration_result = client.fetch_ad_units(integrate_payload)
 print(integration_result)
 ```
 
-While you can provide an `api_key` keyword argument, we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/) (or something similar) to add `ATHEON_CODEX_API_KEY="My Aeon API Key"` to your `.env` file so that your API Key is not stored in source control.
+While you can provide an `api_key` keyword argument, we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/) (or something similar) to add `ATHEON_CODEX_API_KEY="My Eon API Key"` to your `.env` file so that your API Key is not stored in source control.
