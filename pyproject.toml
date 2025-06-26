@@ -6,7 +6,7 @@ authors = [{ name = "Saurabh Ghanekar", email = "ghanekarsaurabh8@gmail.com" }]
 license = "Apache-2.0"
 license-files = ["LICENSE.md"]
 readme = "README.md"
-urls = { homepage = "http://atheon.ad/", repository = "https://github.com/atheon-inc/atheon-codex", documentation = "https://github.com/atheon-inc/atheon-codex" }
+urls = { homepage = "https://atheon.ad/", repository = "https://github.com/atheon-inc/atheon-codex", documentation = "https://github.com/atheon-inc/atheon-codex" }
 requires-python = ">=3.10"
 dependencies = ["httpx>=0.28", "pydantic>=2.10"]
 
