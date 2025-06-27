@@ -12,7 +12,7 @@ class AsyncAtheonCodexClient:
     def __init__(
         self,
         api_key: str,
-        base_url: str = "http://api.atheon.ad/v1",
+        base_url: str = "https://api.atheon.ad/v1",
         headers: dict[str, str] | None = None,
         **kwargs,
     ):

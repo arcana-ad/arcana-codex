@@ -1,9 +1,14 @@
-from typing import Annotated, Any, Self
+from typing import Annotated, Any, Generic, Self, TypeVar
 
 from pydantic import BaseModel, Field, model_validator
 
+# TODO: Remove this when minimum supported version becomes >=3.12
+T = TypeVar("T", bound=Any)
+E = TypeVar("E", bound=Any)
 
-class Result[T: Any, E: Any](BaseModel):
+
+# TODO: Replace class definition to 'class Result[T: Any, E: Any](BaseModel):' when minimum supported version becomes >=3.12
+class Result(BaseModel, Generic[T, E]):
     value: Annotated[T | None, Field(default=None)]
     error: Annotated[E | None, Field(default=None)]
 
